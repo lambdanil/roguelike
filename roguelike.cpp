@@ -3,12 +3,12 @@
 #include <time.h>
 #include <stdio.h>
 
-constexpr int WIDTH = 65;
-constexpr int HEIGHT = 25;
-constexpr int MINX = 5;
-constexpr int MAXX = 10;
-constexpr int MINY = 4;
-constexpr int MAXY = 8;
+constexpr int WIDTH = 90;
+constexpr int HEIGHT = 35;
+constexpr int MINX = 12;
+constexpr int MAXX = 18;
+constexpr int MINY = 5;
+constexpr int MAXY = 7;
 
 
 
@@ -34,7 +34,7 @@ int main()
         }
     }
     // Rooms
-    int rooms = 5 + (rand() % static_cast<int>(10 - 5 + 1));
+    int rooms = 10 + (rand() % static_cast<int>(20 - 10 + 1));
     for (int i = 0; i <= rooms; i++) {
         int roomaddx = 0 + (rand() % static_cast<int>(width - 0 + 1)); // Not actually random
         int roomaddy = 0 + (rand() % static_cast<int>(height - 0 + 1));
@@ -42,8 +42,10 @@ int main()
         int roomsizey = MINY + (rand() % static_cast<int>(MAXY - MINY + 1));
         int roomendx = roomaddx+roomsizex;
         int roomendy = roomaddy+roomsizey;
+        roomaddx += 2;
+        roomaddy += 2;
         while (true) {
-            if (roomendx <= width) {
+            if (roomendx <= width-1) {
                 break;
             }
             roomaddx -= 1;
@@ -51,7 +53,7 @@ int main()
             roomendx -= 1;
         }
         while (true) {
-            if (roomendy <= height) {
+            if (roomendy <= height-1) {
                 break;
             }
             roomaddy -= 1;
@@ -61,16 +63,32 @@ int main()
         for (int yi = roomaddy; yi < roomendy && yi < height; yi++) {
             for (int xi = roomaddx; xi < roomendx && xi < width; xi++) {
                 grid[yi][xi] = '#';
-                if (xi == roomaddx || xi == roomendx-1) {
-                    grid[yi][xi] = '|';
+                if (xi == roomaddx && (grid[yi][xi-1] != '#') && (grid[yi][xi-2] != '#')) {
+                    grid[yi][xi-1] = '|';
                 }
-                if (yi == roomaddy || yi == roomendy-1) {
-                    grid[yi][xi] = '-';
+                if (xi == roomendx-1 && (grid[yi][xi+1] != '#') && (grid[yi][xi+2] != '#')) {
+                    grid[yi][xi+1] = '|';
+                }
+                if (yi == roomaddy && (grid[yi-1][xi] != '#') && (grid[yi-2][xi] != '#')) {
+                    grid[yi-1][xi] = '=';
+                }
+                if (yi == roomendy-1 && (grid[yi+1][xi] != '#') && (grid[yi+2][xi] != '#')) {
+                    grid[yi+1][xi] = '=';
+                }
+            }
+        }
+        for (int yi = 0; yi < height; yi++) {
+            for (int xi = 0; xi < width; xi++) {
+                if (grid[yi][xi] == '|' && (grid[yi][xi-1] == '#') && (grid[yi][xi+1] == '#')) {
+                    grid [yi][xi] = '#';
+                }
+                if (grid[yi][xi] == '=' && (grid[yi-1][xi] == '#') && (grid[yi+1][xi] == '#')) {
+                    grid [yi][xi] = '#';
                 }
             }
         }
     }
     // Generate grid
     print_grid(grid, height, width);
-    
+
 }
