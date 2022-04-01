@@ -51,9 +51,9 @@ int main()
     int* roomsizey;
     roomsizey = new int;
     for (int i = 0; i <= rooms; i++) {
-        *roomaddx = 0 + (rand() % static_cast<int>(width - 0 + 1)); // Not actually random
+        *roomaddx = 0 + (rand() % static_cast<int>(width - 0 + 1)); 
         *roomaddy = 0 + (rand() % static_cast<int>(height - 0 + 1));
-        *roomsizex = MINX + (rand() % static_cast<int>(MAXY - MINX + 1)); // 5 is min, 10 is max
+        *roomsizex = MINX + (rand() % static_cast<int>(MAXY - MINX + 1)); 
         *roomsizey = MINY + (rand() % static_cast<int>(MAXY - MINY + 1));
         *roomendx = *roomaddx+*roomsizex;
         *roomendy = *roomaddy+*roomsizey;
@@ -116,31 +116,182 @@ int main()
             }
         }
     }
-    int* startpoint;
-    startpoint = new int[2];
-    int* endpoint;
-    endpoint = new int[2];
-    for (int yi = *roomaddy; yi < *roomendy && yi < height; yi++) {
-        for (int xi = *roomaddx; xi < *roomendx && xi < width; xi++) {
+    *roomaddx = 0 + (rand() % static_cast<int>(width - 0 + 1));
+    *roomaddy = 0 + (rand() % static_cast<int>(height - 0 + 1));
+    *roomsizex = MINX + (rand() % static_cast<int>(MAXY - MINX + 1));
+    *roomsizey = MINY + (rand() % static_cast<int>(MAXY - MINY + 1));
+    *roomendx = *roomaddx + *roomsizex;
+    *roomendy = *roomaddy + *roomsizey;
+    int* tracer;
+    tracer = new int[2];
+    tracer[0] = 0;
+    tracer[1] = 0;
+    int* newpos;
+    newpos = new int[2];
+    newpos[0] = 0;
+    newpos[1] = 0;
+    int* lastpos;
+    lastpos = new int[2];
+    std::vector<int> donepos;
+    for (int yi = 0; yi < height; yi++) {
+        for (int xi = 0; xi < width; xi++) {
             if (grid[yi][xi] == '+') {
-                startpoint[0] = yi;
-                startpoint[1] = xi;
-                for (int yyi = *roomaddy; yyi < *roomendy && yyi < height; yyi++) {
-                    for (int xxi = *roomaddx; xxi < *roomendx && xxi < width; xxi++) {
-                    }
+                if (grid[yi + 1][xi] != '=' && grid[yi + 1][xi] != '|') {
+                    donepos.push_back(yi+1);
+                    donepos.push_back(xi);
+                }
+                else if (grid[yi - 1][xi] != '=' && grid[yi - 1][xi] != '|') {
+                    donepos.push_back(yi - 1);
+                    donepos.push_back(xi);
+                }
+                else if (grid[yi][xi+1] != '=' && grid[yi][xi + 1] != '|') {
+                    donepos.push_back(yi);
+                    donepos.push_back(xi+1);
+                }
+                else if (grid[yi][xi-1] != '=' && grid[yi][xi - 1] != '|') {
+                    donepos.push_back(yi);
+                    donepos.push_back(xi-1);
                 }
             }
         }
     }
-    std::cout << startpoint[0] << std::endl;
-    delete[] endpoint;
-    delete[] startpoint;
+    for (unsigned int i = 0; i < ((donepos.size() / 2)) - 2; i++) {
+        lastpos[0] = donepos.at(0 + (i * 2));
+        lastpos[1] = donepos.at(1 + (i * 2));
+        newpos[0] = donepos.at(2 + (i * 2));
+        newpos[1] = donepos.at(3 + (i * 2));
+        while (lastpos[0] != newpos[0] && lastpos[1] != newpos[1]) {
+            /*if (lastpos[0] != newpos[0]) {
+                if (lastpos[0] < newpos[0]) {
+                    for (int i = lastpos[1]; i != newpos[1]+1; i++) {
+                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '=') {
+                            //grid[lastpos[0]][lastpos[1]] = '#';
+                            lastpos[0] = i+1; }
+                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '=')) {
+                            lastpos[1] = lastpos[1]+1;
+                        }
+                        grid[lastpos[0]][lastpos[1]] = '#';
+                        if (lastpos[0] == newpos[0]) {
+                            break;
+                        }
+                    }
+                }
+                else {
+                    for (int i = lastpos[0]; i != newpos[0]-1; i--) {
+                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '=') {
+                            //grid[lastpos[0]][lastpos[1]] = '#';
+                            lastpos[0] = i-1; }
+                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '=')) {
+                            lastpos[1] = lastpos[1]-1;
+                        }
+                        grid[lastpos[0]][lastpos[1]] = '#';
+                        if (lastpos[0] == newpos[0]) {
+                            break;
+                        }
+                    }
+                }
+            }*/
+            bool* reverse;
+            reverse = new bool;
+            *reverse = false;
+            if (lastpos[1] != newpos[1]) {
+                if (lastpos[1] < newpos[1]) {
+                    for (int i = lastpos[1]; i != newpos[1]+1; i++) {
+                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '=') {
+                            grid[lastpos[0]][lastpos[1]] = '#';
+                            lastpos[1] = i+1; }
+                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '=')) {
+                            if (lastpos[0] < 2) {
+                                *reverse = true;
+                            }
+                            else {
+                                *reverse = false;
+                                lastpos[0] = lastpos[0]+1;
+                            }
+                        }
+                        grid[lastpos[0]][lastpos[1]] = '#';
+                        if (lastpos[1] == newpos[1]) {
+                            break;
+                        }
+                    }
+                }
+                else {
+                    for (int i = lastpos[1]; i != newpos[1]-1; i--) {
+                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '=') {
+                            grid[lastpos[0]][lastpos[1]] = '#';
+                            lastpos[1] = i-1; }
+                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '=')) {
+                            if (lastpos[0] > HEIGHT-2) {
+                                *reverse = true;
+                            }
+                            else {
+                                *reverse = false;
+                                lastpos[0] = lastpos[0]-1;
+                            }
+                        }
+                        grid[lastpos[0]][lastpos[1]] = '#';
+                        if (lastpos[1] == newpos[1]) {
+                            break;
+                        }
+                    }
+                }
+            }
+            // -----------------------------------------------------
+            if (lastpos[0] != newpos[0]) {
+                if (lastpos[0] < newpos[0]) {
+                    for (int i = lastpos[0]; i != newpos[0]+1; i++) {
+                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '=') {
+                            grid[lastpos[0]][lastpos[1]] = '#';
+                            lastpos[0] = i+1; }
+                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '=')) {
+                            if (lastpos[1] < 2) {
+                                *reverse = true;
+                            }
+                            else {
+                                *reverse = false;
+                                lastpos[1] = lastpos[1]+1;
+                            }
+                        }
+                        grid[lastpos[0]][lastpos[1]] = '#';
+                        if (lastpos[0] == newpos[0]) {
+                            break;
+                        }
+                    }
+                }
+                else {
+                    for (int i = lastpos[0]; i != newpos[0]-1; i--) {
+                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '=') {
+                            grid[lastpos[0]][lastpos[1]] = '#';
+                            lastpos[0] = i-1; }
+                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '=')) {
+                            if (lastpos[1] > WIDTH - 2) {
+                                *reverse = true;
+                            }
+                            else {
+                                *reverse = false;
+                                lastpos[1] = lastpos[1]-1;
+                            }
+                        }
+                        grid[lastpos[0]][lastpos[1]] = '#';
+                        if (lastpos[0] == newpos[0]) {
+                            break;
+                        }
+                    }
+                }
+            delete reverse;
+            }
+            // ----------------------------------------------------
+        }
+    }
+
     delete roomaddx;
     delete roomaddy;
     delete roomendx;
     delete roomendy;
     delete roomsizex;
     delete roomsizey;
+    delete[] newpos;
+    delete[] lastpos;
 
     // Generate grid
     print_grid(grid, height, width);
