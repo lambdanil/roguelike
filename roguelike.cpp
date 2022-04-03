@@ -291,8 +291,8 @@ int main()
     bool* founddoor;
     founddoor = new bool;
     lastpos = new int;
-    for (int yi = 0; yi < WHEIGHT; yi++) {
-        for (int xi = 0; xi < WWIDTH; xi++) {
+    for (int yi = 1; yi < WHEIGHT; yi++) {
+        for (int xi = 1; xi < WWIDTH; xi++) {
             if ((grid[yi+1][xi] == '|' && grid[yi-1][xi] == '|' || (grid[yi][xi+1] == '=' && grid[yi][xi-1]) == '=') && yi > 0 && xi > 0) {
                 *lastpos = 1;
                 *founddoor = false;
