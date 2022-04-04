@@ -98,7 +98,7 @@ int main()
                     }
                 }
                 if (yi == *roomaddy && (grid[yi-1][xi] != '#') && (grid[yi-2][xi] != '#')) {
-                    grid[yi-1][xi] = '=';
+                    grid[yi-1][xi] = '-';
                     //(rand() % 5) == 1 &&
                     if ((rand() % 2) == 1 &&not *found) {
                         *found = true;
@@ -106,7 +106,7 @@ int main()
                     }
                 }
                 if (yi == *roomendy-1 && (grid[yi+1][xi] != '#') && (grid[yi+2][xi] != '#')) {
-                    grid[yi+1][xi] = '=';
+                    grid[yi+1][xi] = '-';
                     if ((rand() % 2) == 1 &&not *found) {
                         *found = true;
                         grid[yi+1][xi] = '+';
@@ -135,19 +135,19 @@ int main()
     for (int yi = 0; yi < height; yi++) {
         for (int xi = 0; xi < width; xi++) {
             if (grid[yi][xi] == '+'  && yi > 0 && xi > 0) {
-                if (grid[yi + 1][xi] != '=' && grid[yi + 1][xi] != '|') {
+                if (grid[yi + 1][xi] != '-' && grid[yi + 1][xi] != '|') {
                     donepos.push_back(yi+1);
                     donepos.push_back(xi);
                 }
-                else if (grid[yi - 1][xi] != '=' && grid[yi - 1][xi] != '|') {
+                else if (grid[yi - 1][xi] != '-' && grid[yi - 1][xi] != '|') {
                     donepos.push_back(yi - 1);
                     donepos.push_back(xi);
                 }
-                else if (grid[yi][xi+1] != '=' && grid[yi][xi + 1] != '|') {
+                else if (grid[yi][xi+1] != '-' && grid[yi][xi + 1] != '|') {
                     donepos.push_back(yi);
                     donepos.push_back(xi+1);
                 }
-                else if (grid[yi][xi-1] != '=' && grid[yi][xi - 1] != '|') {
+                else if (grid[yi][xi-1] != '-' && grid[yi][xi - 1] != '|') {
                     donepos.push_back(yi);
                     donepos.push_back(xi-1);
                 }
@@ -166,11 +166,11 @@ int main()
             if (lastpos[1] != newpos[1]) {
                 if (lastpos[1] < newpos[1]) {
                     for (int i = lastpos[1]; i != newpos[1]+1; i++) {
-                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '=') {
+                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '-') {
                             grid[lastpos[0]][lastpos[1]] = '#';
                             lastpos[1] = i+1; }
                         int index = 0;
-                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '=')) {
+                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '-')) {
                             if (lastpos[0] < 2) {
                                 *reverse = true;
                             }
@@ -195,11 +195,11 @@ int main()
                 else {
                     int index;
                     for (int i = lastpos[1]; i != newpos[1]-1; i--) {
-                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '=') {
+                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '-') {
                             grid[lastpos[0]][lastpos[1]] = '#';
                             lastpos[1] = i-1; }
                         index = WHEIGHT*2;
-                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '=')) {
+                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '-')) {
                             if (lastpos[0] > WHEIGHT-2) {
                                 *reverse = true;
                             }
@@ -223,11 +223,11 @@ int main()
                 int index;
                 if (lastpos[0] < newpos[0]) {
                     for (int i = lastpos[0]; i != newpos[0]+1; i++) {
-                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '=') {
+                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '-') {
                             grid[lastpos[0]][lastpos[1]] = '#';
                             lastpos[0] = i+1; }
                         index = 0;
-                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '=')) {
+                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '-')) {
                             if (lastpos[1] < 2) {
                                 *reverse = true;
                             }
@@ -248,11 +248,11 @@ int main()
                 }
                 else {
                     for (int i = lastpos[0]; i != newpos[0]-1; i--) {
-                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '=') {
+                        if (grid[lastpos[0]][lastpos[1]] != '+' && grid[lastpos[0]][lastpos[1]] != '|' && grid[lastpos[0]][lastpos[1]] != '-') {
                             grid[lastpos[0]][lastpos[1]] = '#';
                             lastpos[0] = i-1; }
                         index = WWIDTH*2;
-                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '=')) {
+                        while ((grid[lastpos[0]][lastpos[1]] == '+' || grid[lastpos[0]][lastpos[1]] == '|' || grid[lastpos[0]][lastpos[1]] == '-')) {
                             if (lastpos[1] > WWIDTH - 2) {
                                 *reverse = true;
                             }
@@ -282,7 +282,7 @@ int main()
                     grid[yi][xi] = '|';
                 }
                 if (grid[yi][xi+1] || grid[yi][xi-1]) {
-                    grid[yi][xi] = '=';
+                    grid[yi][xi] = '-';
                 }
             }
         }
@@ -293,7 +293,7 @@ int main()
     lastpos = new int;
     for (int yi = 1; yi < WHEIGHT; yi++) {
         for (int xi = 1; xi < WWIDTH; xi++) {
-            if ((grid[yi+1][xi] == '|' && grid[yi-1][xi] == '|' || (grid[yi][xi+1] == '=' && grid[yi][xi-1]) == '=') && yi > 0 && xi > 0) {
+            if (grid[yi+1][xi] == '|' && grid[yi-1][xi] == '|' || (grid[yi][xi+1] == '-' && grid[yi][xi-1]) == '-') {
                 *lastpos = 1;
                 *founddoor = false;
                 while (true) {
@@ -328,14 +328,14 @@ int main()
                 }
             }
 
-            if ((grid[yi][xi+1] == '=' && grid[yi][xi-1] == '=' || (grid[yi+1][xi] == '|' && grid[yi-1][xi]) == '|') && yi > 0 && xi > 0) {
+            if (grid[yi][xi+1] == '-' && grid[yi][xi-1] == '-' || (grid[yi+1][xi] == '|' && grid[yi-1][xi]) == '|') {
                 *lastpos = 1;
                 *founddoor = false;
                 while (true) {
                     if (xi+(*lastpos) > WWIDTH) {
                         break;
                     }
-                    if (grid[yi][xi+(*lastpos)] != '=') {
+                    if (grid[yi][xi+(*lastpos)] != '-') {
                         if ((grid[yi][xi+(*lastpos)]) == '+') {
                             *founddoor = true;
                         }
@@ -348,7 +348,7 @@ int main()
                     if (yi-(*lastpos) < 2) {
                         break;
                     }
-                    if (grid[yi][xi-(*lastpos)] != '=') {
+                    if (grid[yi][xi-(*lastpos)] != '-') {
                         if ((grid[yi][xi-(*lastpos)]) == '+') {
                             *founddoor = true;
                         }
